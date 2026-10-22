@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<title>Season2 AR Plus</title>
+
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  font-family: Arial, sans-serif;
+}
+
+.a-enter-vr,
+.a-enter-vr-button {
+  display: none !important;
+}
+
+.mindar-ui-overlay,
+.mindar-ui-scanning,
+.mindar-ui-loading {
+  background: transparent !important;
+}
+
+#guide {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+  background: rgba(0,0,0,0.72);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 24px;
+  font-size: 18px;
+  text-align: center;
+  line-height: 1.45;
+  width: 280px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="guide">
+  소양강 처녀상 이미지를<br>
+  카메라에 비춰 주세요
+</div>
+
+<a-scene
+  mindar-image="imageTargetSrc: ./s2_targets.mind;"
+  embedded
+  color-space="sRGB"
+  renderer="colorManagement: true; alpha: true"
+  vr-mode-ui="enabled: false"
+  loading-screen="enabled: false"
+  device-orientation-permission-ui="enabled: false">
+
+  <a-assets>
+    <img id="panelImg" src="./s2_panel.png">
+  </a-assets>
+
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+  <a-entity id="target" mindar-image-target="targetIndex: 0">
+    <a-image
+      src="#panelImg"
+      position="0 0.3 0"
+      width="4.0"
+      height="2.7">
+    </a-image>
+  </a-entity>
+
+</a-scene>
+
+<script>
+const guide = document.getElementById("guide");
+const target = document.getElementById("target");
+
+target.addEventListener("targetFound", () => {
+  guide.innerHTML = "모임 문화 변화<br>AR 정보가 표시되었습니다";
+});
+
+target.addEventListener("targetLost", () => {
+  guide.innerHTML = "소양강 처녀상 이미지를<br>카메라에 비춰 주세요";
+});
+</script>
+
+</body>
+</html>
